@@ -2,6 +2,7 @@ const Joi = require("joi");
 const mongoose = require("mongoose");
 const jwt = require('jsonwebtoken');
 const config = require('config');
+const express = require("express");
 
 const userschema = new mongoose.Schema({
     name: {
@@ -21,7 +22,10 @@ const userschema = new mongoose.Schema({
     bussnisaccount: {type:Boolean,required:true},
     Date:{type:Date},
   });
-  
+  userschema.methods.generateAuthToken = function () {
+    const token = jwt.sign({ _id: this._id, biz: this.biz }, config.get('jwtKey'));
+    return token;
+  }
   const User = mongoose.model('User', userschema);
  
   const Schema = Joi.object({

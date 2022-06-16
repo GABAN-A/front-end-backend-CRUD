@@ -1,9 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <input class="submit"  type="submit" value="SUBMIT">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>hello</h1>
+    <button onclick="aref()">button</button>
+    <button >button</button>
+
+    <p id="demo">these is user data</p>
+    <ul><li id="demo1"></li></ul>
+
 </body>
 <script>
+ let userdata,authtoken;
+ function gettoken(){
+ fetch('http://localhost:3000/auth/me')
+  .then((response) => {
+    authtoken=(response.headers.get('authotoken'));
+    console.log(authtoken)
+  });
+  }
+  gettoken();
+    function aref(){
+    fetch('/auth/user', {
+  method: 'GET',
+  headers: {
+    'x-auth-token': authtoken
+  },
+}).then(res => res.json())
+.then(data => {   document.getElementById("demo1").innerHTML =  ('name:'+JSON.stringify(data.name)+'email:'+JSON.stringify(data.email) )})
+.catch(err => { console.log(err) })
+
+    }
+
 
 </script>
 </html>

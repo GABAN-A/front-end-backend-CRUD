@@ -2,7 +2,6 @@ const Joi = require("joi");
 const mongoose = require("mongoose");
 const jwt = require('jsonwebtoken');
 const config = require('config');
-const express = require("express");
 
 const userschema = new mongoose.Schema({
     name: {
@@ -40,7 +39,8 @@ const userschema = new mongoose.Schema({
         minDomainSegments: 2,
         tlds: {
           allow: ['com', 'net']
-        }
+        },
+
       }),
     normalUser: Joi.any(),
     bussnisaccount: Joi.any(),

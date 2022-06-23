@@ -1,3 +1,7 @@
+const auth = require('./routes/auth');
+const login = require('./routes/login');
+const cards= require('./routes/bizcards');
+
 const Joi = require('joi');
 const bcrypt=require('bcrypt');
 const express = require('express')
@@ -7,17 +11,9 @@ const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
 const path = require('path');
 const _ = require("lodash")
-app.use(express.json());
-const auth = require('./routes/auth');
-const  {User,Schema} = require('../rest/models/users');
-const router = express.Router();
+app.use(bodyParser.json());
 
 
-app.use('/auth', auth);
-app.use(express.static(path.join(__dirname, 'public')))
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
 const port = 3000;
 const chalk = require('chalk');
 var morgan = require('morgan')
@@ -35,31 +31,20 @@ mongoose.connect('mongodb://localhost/eshop')
   origin: 'https://localhost/3000'
 }));
 
-app.get('/', function (req, res) {
-  res.sendFile('/index.html');
-})
+app.use('/', login);
+app.use('/auth', auth);
+app.use('/cards', cards);
 
-app.post('/',  async(req, res) => {
-  const {error,value} = Schema.validate(req.body);
-  console.log(badreq(error, value));
- 
-  if (error) {
-    res.status(400).send(error.message)
-  }
-  console.log(req.body);
- 
-  let user = await User.findOne({ email: req.body.email });
-  if (user) return res.status(400).send("User already registered.");
-  
-  user = new User(req.body);
- const salt = await bcrypt.genSalt(10);
-  user.password = await bcrypt.hash(user.password, salt);
- 
-  await user.save();
- 
-  
-  res.send(_.pick(user, ["_id", "name", "email"])).status(200)
-});
+app.use(express.static(path.join(__dirname, 'public')))
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
+
+
+
+
+
 
 
 

@@ -15,7 +15,50 @@
   <title>Document</title>
 
 </head>
-
+<style>
+#userid{
+  word-wrap: break-word;
+}
+#myList{
+  display: flex;
+justify-content: center;  flex-wrap: wrap;
+  width: 100%;
+  padding: 2px 16px;
+  height: 100%;
+}
+#card{
+  display: flex; 
+  flex-direction: column;
+align-items: center;
+justify-content: center;
+  background-color: goldenrod;
+  width:40%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  margin: 10px;
+  padding: 10px;
+  line-height: 1.5;
+  height: 30vh;
+  border-radius: 9px;
+}
+#card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.9);
+}
+li{
+  list-style-type: lower-alpha;
+}
+#cardnmuber{ 
+  padding: 3px;
+  margin-top: 30px;
+text-align: center;
+  border:3px solid black;
+  background-color: rgb(168, 168, 168);
+  border-radius: 6px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.5);
+  width: 40%;
+  height: 30px;
+}
+</style>
 <body>
 
   <form id="basic-form" action="" method="post">
@@ -43,6 +86,20 @@
     </p>
   </form>
 
+<center><h1>ALL BUSSINISE CARDS</h1></center>
+
+<form id="basic-form" action="http://localhost:3000/cards/id" method="post">
+  <p>
+    <label for="_id">search card by id <span>(required, at least 24 characters)</span></label>
+    <input id="name" name="_id" minlength="24" type="text" required>
+  </p>
+</p>
+<input class="submit" type="submit" value="SUBMIT">
+</p>
+</form>
+
+<div id="myList">
+</div>
 </body>
 <script>
  function validate() {
@@ -64,6 +121,34 @@ function validate2() {
   }
 }
 
+let idname;
+let a=1;
+ fetch('http://localhost:3000/cards/find').then((resp)=>{ return resp.json() }).then((json)=>{ console.log((Object.entries(json[0])));
+  idname=json;
+  }
+) 
+  setTimeout(function(){
+    console.log(idname);
+    let indexlength=Object.keys(idname).length;
+    let list = document.getElementById("myList");
+  for(i=0;i< Object.entries(idname[i]).length;i++){
+    let div = document.createElement("div")
+    div.id="card";
+    let x=  Object.entries(idname[i]);
+    x.pop();x.pop();
+  x.slice(1).forEach((item)=>{
+  let li = document.createElement("li");
+  li.innerText = (item[0]+" : "+item[1]);
+ div.appendChild(li);
+ list.appendChild(div)
+})
+let div1 = document.createElement("div");
+div1.id="cardnmuber";
+div1.innerText = "bussinise Card Number:"+a+"\n\n\n";
+  div.appendChild(div1);
+  a++;
+  }
+}, 1000);
 </script>
 
 </html>

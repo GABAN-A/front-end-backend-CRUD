@@ -9,7 +9,7 @@ const auth = require('../midlleware/auth');
 const _ = require("lodash");
 const {nextTick } = require('process');
 
-let authotoken;let user={};
+let authotoken;let user={};let golabluser="";
 router.use(express.static(path.join(__dirname, 'public')))
 router.use(bodyParser.urlencoded({
   extended: true
@@ -36,7 +36,6 @@ golabluser=user;
 
 });
 router.get('/userpage',async function (req, res,) {
-  console.log("these is",golabluser.name)
   if(golabluser=""){
     res.send("no entry")
   }

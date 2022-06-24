@@ -37,19 +37,29 @@ router.route("/find").get(function(req, res) {
   
   });
 });
-
-
-router.get('/:id',  (req, res) => {
-  
-  let byid =req.params.id;
-  console.log(byid);
+router.post('/hello',  (req, res) => {
+ let card;
+  var id = req.body._id;
+Card.findById(id, function (err, docs) {
+    if (err){
+        console.log(err);
+    }
+    else{
+      card=docs;
+        console.log("Result : ", docs);
+        res.send(card)
+    }
+});
+});
+router.get('/getcard',auth, (req, res) => {
+   let byid=req.user._id
   Card.find({user_id:byid}, function (err, docs) {
       if (err){
           console.log(err);
       }
       else{
-        res.send(docs)
-      }
+        res.send(docs)     
+       }
   })
 });
 

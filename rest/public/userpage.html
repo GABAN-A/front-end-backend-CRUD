@@ -123,7 +123,9 @@
     </ul>
   </form>
   </div>
-  <a href="#" id="btncards">gocards</a>
+<button onclick="getcards()">getcard</button>
+<div id="getcardsbyuser"></div>
+
 </body>
 <script>
 let  idofuser;
@@ -134,15 +136,10 @@ let  idofuser;
         authtoken = (response.headers.get('authotoken'));
         idofuser= (response.headers.get('_id'))
        document.getElementById("userid1").value =idofuser;
-       let getcards=  document.getElementById("btncards");
-getcards.onclick = function() {
-  getcards.href="http://localhost:3000/cards/"+idofuser;
-}
       });
     
    
   function aref() {
-    console.log(JSON.stringify(authtoken))
     fetch('/auth/user', {
         method: 'GET',
         headers: {
@@ -160,7 +157,22 @@ getcards.onclick = function() {
       })
   }
 
-
+  function getcards() {
+    console.log(authtoken)
+    fetch('http://localhost:3000/cards/getcard', {
+        method: 'GET',
+        method: 'GET',
+        headers: {
+          'x-auth-token': authtoken
+        },
+      }).then(res => res.json())
+      .then(data => {
+        document.getElementById("getcardsbyuser").innerHTML = JSON.stringify(data);
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
 
 
 </script>

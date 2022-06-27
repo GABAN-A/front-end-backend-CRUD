@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <title>Userpage</title>
 </head>
 <style type="text/css">
@@ -87,28 +88,40 @@
     background: linear-gradient(to bottom, #2D77A2 5%, #337DA8 100%);
     background-color: #28739E;
   }
+body{
+  background-color: beige;
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+  text-align: center;
+  font-size: 1.1rem;
+}
 </style>
 
 <body>
-  <h1 id="username">Hello </div>
+ 
+
+    <h1 id="username">Hello
+  </div>
   </h1>
-  <button onclick="aref()">button1</button>
+  <button onclick="aref()">MY PROFILE INFO</button>
 
   <p id="demo">these is user data</p>
   <ul>
     <li id="demo1"></li>
   </ul>
 
-  <form class="form-style-9" action="http://localhost:3000/cards" method="post">
+  <form class="form-style-9" id="cardform">
     <ul>
       <li>
-        <input type="text" name="bizName" class="field-style field-split align-left" placeholder=" bizName" />
-        <input type="text" hidden="true" name="user_id" class="field-style field-split align-left" id="userid1" value=""></input>
-
-
+        <input type="text" name="bizName" class="field-style field-split align-left" placeholder="bizName" />
+        <input type="text" name="bizImage" class="field-style field-split align-left" placeholder="bizImageLINK" />
+        <input type="text" hidden="true" name="user_id" class="field-style field-split align-left" id="userid1"
+          value=""></input>
       </li>
       <li>
-
         <input type="text" name="bizPhone" class="field-style field-split align-left" placeholder="bizPhone" />
       </li>
       <li>
@@ -118,27 +131,41 @@
         <textarea name="bizDescription" class="field-style" placeholder="bizDescription"></textarea>
       </li>
       <li>
-        <input type="submit"  value="Send Message" />
+        <input id="submitButton" type="submit" value="Send Message"></input>
       </li>
     </ul>
   </form>
+  <div id="added">
   </div>
-<button onclick="getcards()">getcard</button>
-<div id="getcardsbyuser"></div>
-
+  </div>
+  <button onclick="getcards()">getcard</button>
+  <div id="getcardsbyuser"></div>
+  
 </body>
 <script>
-let  idofuser;
-  let authtoken, Username,x;
-  
-      fetch('http://localhost:3000/auth/userpage')
-      .then((response) => {
-        authtoken = (response.headers.get('authotoken'));
-        idofuser= (response.headers.get('_id'))
-       document.getElementById("userid1").value =idofuser;
-      });
-    
-   
+
+  let idofuser;
+  let authtoken, Username, x, bussinseaccount;
+
+  fetch('http://localhost:3000/auth/userpage')
+    .then((response) => {
+      authtoken = (response.headers.get('authotoken'));
+      idofuser = (response.headers.get('_id'));
+      bussinseaccount = (response.headers.get('bussnisaccount'));
+      document.getElementById("userid1").value = idofuser;
+      console.log(bussinseaccount)
+      displyform();
+
+      function displyform() {
+        if (bussinseaccount === 'false') {
+          console.log("these", bussinseaccount)
+          document.getElementById("cardform").style.display = "none";
+        } else {
+          document.getElementById("cardform").style.display = "block";
+        }
+      }
+    });
+
   function aref() {
     fetch('/auth/user', {
         method: 'GET',
@@ -156,25 +183,47 @@ let  idofuser;
         console.log(err)
       })
   }
+  let form = document.getElementById("cardform");
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    let prepayload = new FormData(form);
+    let payload = new URLSearchParams(prepayload);
+    console.log([...payload])
+    fetch('http://localhost:3000/cards', {
+      method: "POST",
+      headers: {
+        'x-auth-token': authtoken
+      },
+      body: payload,
+    }).then(res => (res.json())).then(data =>
+      $('#added').html(
+        "<p>All new card data  " + JSON.stringify(data) + "</p>")
+    ).catch(err => $('#added').html(
+      "<p>BAD Authentication invalid token " + err + "</p>"))
+
+  });
 
   function getcards() {
     console.log(authtoken)
     fetch('http://localhost:3000/cards/getcard', {
-        method: 'GET',
         method: 'GET',
         headers: {
           'x-auth-token': authtoken
         },
       }).then(res => res.json())
       .then(data => {
-        document.getElementById("getcardsbyuser").innerHTML = JSON.stringify(data);
+        console.log(data);
+        if (data === false) {
+          document.getElementById("getcardsbyuser").innerHTML = "not A Bussinse account";
+        } else {
+          document.getElementById("getcardsbyuser").innerHTML = JSON.stringify(data);
+        }
       })
       .catch(err => {
         console.log(err)
       })
+
   }
-
-
 </script>
 
 </html>

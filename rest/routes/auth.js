@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const {User }  = require('../models/users');
 const auth = require('../midlleware/auth');
 const _ = require("lodash");
-const {nextTick } = require('process');
+const {nextTick} = require('process');
 
 let authotoken;let user={};let golabluser="";
 router.use(express.static(path.join(__dirname, 'public')))
@@ -41,7 +41,7 @@ router.get('/userpage',async function (req, res,) {
   }
 else{
   res.header("authotoken",authotoken);
-  res.header(_.pick(user, ['_id', 'name', 'email'])).sendFile(path.join(__dirname, '../public', 'userpage.html'));
+  res.header(_.pick(user, ['_id', 'name','bussnisaccount'])).sendFile(path.join(__dirname, '../public', 'userpage.html'));
 console.log("these is hsssere",(authotoken))
 }
 })

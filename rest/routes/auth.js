@@ -7,14 +7,13 @@ const bodyParser = require('body-parser');
 const {User }  = require('../models/users');
 const auth = require('../midlleware/auth');
 const _ = require("lodash");
-const {nextTick} = require('process');
+
 
 let authotoken;let user={};let golabluser="";
 router.use(express.static(path.join(__dirname, 'public')))
 router.use(bodyParser.urlencoded({
   extended: true
 }));
-
 
 router.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '../public', 'login.html'));
@@ -36,19 +35,20 @@ golabluser=user;
 
 });
 router.get('/userpage',async function (req, res,) {
-  if(golabluser=""){
-    res.send("no entry")
+  console.log(golabluser)
+  if(golabluser===""){
+    res.redirect('/auth')
   }
 else{
   res.header("authotoken",authotoken);
   res.header(_.pick(user, ['_id', 'name','bussnisaccount'])).sendFile(path.join(__dirname, '../public', 'userpage.html'));
-console.log("these is hsssere",(authotoken))
+console.log(",USer loged in,these is token",(authotoken))
 }
 })
 function validate(req) {
   const schema = Joi.object({
     email: Joi.string().min(6).max(255).required().email(),
-    password: Joi.string().min(5).max(1024).required()
+    password: Joi.string().min(4).max(1024).required()
   });
   return schema.validate(req);
 }

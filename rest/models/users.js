@@ -19,7 +19,8 @@ const userschema = new mongoose.Schema({
       required: true
     },
     bussnisaccount: {type:Boolean,required:true},
-    Date:{type:Date},
+    created_at    : { type: Date, required: true, default: Date.now },
+    cards: Array,
   });
   userschema.methods.generateAuthToken = function () {
     const token = jwt.sign({ _id: this._id, biz: this.biz }, config.get('jwtKey'));
@@ -30,7 +31,7 @@ const userschema = new mongoose.Schema({
   const Schema = Joi.object({
     name: Joi.string()
       .alphanum()
-      .min(3)
+      .min(5)
       .max(30)
       .required(),
     password: Joi.string().min(4).required(),
@@ -44,8 +45,16 @@ const userschema = new mongoose.Schema({
       }),
     normalUser: Joi.any(),
     bussnisaccount: Joi.any(),
+    
   })
-  
+  function validateCards(data) {
+ 
+    const schema = Joi.object({
+      cards: Joi.array().min(1).required()
+    });
+   
+    return schema.validate(data);
+  }
   exports.User = User;
-
+exports.validateCards = validateCards;
 exports.Schema=Schema;

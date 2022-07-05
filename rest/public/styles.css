@@ -1,11 +1,18 @@
-
+@import url('https://fonts.googleapis.com/css2?family=El+Messiri:wght@500&display=swap');
   body{
-  margin: auto;
-  font-family: 'Lato';
-  font-weight: 300;
+    font-family: 'El Messiri', sans-serif;
   font-size: 1.25rem;
-  width: 90%;
+  width: 90vw;
   background-color: beige;
+}
+#container{
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  justify-content: center;
+  justify-items: center;
+  text-align: center;
+
 }
 
 form, p {
@@ -59,4 +66,66 @@ input.error {
     font-weight: 300;
     padding: 10px 0;
     line-height: 1;
+}
+.submit:hover{
+  background-color: gray;
+}
+.registerduserlogin:hover{
+  background-color: gray;
+}
+#userid{
+  word-wrap: break-word;
+}
+#myList{
+  display: flex;
+justify-content: center;  flex-wrap: wrap;
+  width: 100%;
+  padding: 2px 16px;
+  height: 100%;
+}
+#card{
+  display: flex; 
+  flex-direction: column;
+align-items: center;
+justify-content: center;
+text-align: center;
+  background-color: goldenrod;
+  width:40%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  margin: 10px;
+  padding: 10px;
+  line-height: 1.5;
+  height: auto;
+  border-radius: 9px;
+}
+#card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.9);
+}
+li{
+  list-style-type: lower-alpha;
+}
+#cardnmuber{ 
+  padding: 3px;
+  margin-top: 30px;
+text-align: center;
+  border:3px solid black;
+  background-color: rgb(168, 168, 168);
+  border-radius: 6px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.5);
+  width: 40%;
+  height: 50px;
+}
+.registerduserlogin{
+  color: rgb(255, 255, 255);
+  font-family: 'El Messiri', sans-serif;
+  font-size: 1.5rem;
+  background-color: black;
+  border-radius: 7px;
+  padding: 3px;
+}
+#bussinsecheak{
+  width: 40%;
+  margin:0 auto;
+
 }

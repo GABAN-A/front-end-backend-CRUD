@@ -9,7 +9,17 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <title>Userpage</title>
 </head>
-<style type="text/css">
+<style>
+  
+  button{
+    border: 3px goldenrod solid;
+    border-radius: 4px;
+box-shadow: 2px 0px 22px 1px #767644;
+  }
+  button:hover{
+    box-shadow: 2px 0px 22px 10px #767644;
+
+  }
   .form-style-9 {
     max-width: 450px;
     background: #FAFAFA;
@@ -19,19 +29,16 @@
     border-radius: 10px;
     border: 6px solid #305A72;
   }
-
   .form-style-9 ul {
     padding: 0;
     margin: 0;
     list-style: none;
   }
-
   .form-style-9 ul li {
     display: block;
     margin-bottom: 10px;
     min-height: 35px;
   }
-
   .form-style-9 ul li .field-style {
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -39,18 +46,14 @@
     padding: 8px;
     outline: none;
     border: 1px solid #B0CFE0;
-
   }
-
   .form-style-9 ul li .field-style:focus {
     box-shadow: 0 0 5px #B0CFE0;
     border: 1px solid #B0CFE0;
   }
-
   .form-style-9 ul li .field-split {
     width: 49%;
   }
-
   .form-style-9 ul li .field-full {
     width: 100%;
   }
@@ -82,50 +85,72 @@
     text-decoration: none;
     font: 12px Arial, Helvetica, sans-serif;
   }
-
   .form-style-9 ul li input[type="button"]:hover,
   .form-style-9 ul li input[type="submit"]:hover {
     background: linear-gradient(to bottom, #2D77A2 5%, #337DA8 100%);
     background-color: #28739E;
   }
-body{
-  background-color: beige;
-  display: flex;
-  justify-content: center;
-  justify-items: center;
-  flex-direction: column;
-  flex-wrap: wrap;
-  text-align: center;
-  font-size: 1.1rem;
-}
+  body {
+    background-color: beige;
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    text-align: center;
+    font-size: 1rem;
+ 
+    height: auto;
+  }
+  #cardform {
+    border-color: yellowgreen;
+  }
+  #updatecar {
+    display: block;
+  }
+  #likesdata,
+  #deletecard,
+  #newcardaupdatedata,
+  #getcardsbyuser {
+    margin: 0 auto;
+    width: 70vw;
+    border: 3px white solid;
+    padding: 15px;
+    overflow-wrap: break-word;
+    text-align: center;
+  }
+  #cardnumber{
+    width:50%!important;
+  }
 </style>
 
 <body>
- 
 
-    <h1 id="username">Hello
-  </div>
+
+  <h1 id="username">Hello
+    </div>
   </h1>
-  <button onclick="aref()">MY PROFILE INFO</button>
+  <button onclick="getuserdata()">MY PROFILE INFO</button>
 
   <p id="demo">these is user data</p>
   <ul>
     <li id="demo1"></li>
   </ul>
 
-  <form class="form-style-9" id="cardform">
+  <form class="form-style-9" id="cardfor">
     <ul>
       <li>
         <input type="text" name="bizName" class="field-style field-split align-left" placeholder="bizName" />
+        <input type="text" name="UserIDnumber" class="field-style field-split align-left" placeholder="UserIDnumber" />
         <input type="text" name="bizImage" class="field-style field-split align-left" placeholder="bizImageLINK" />
         <input type="text" hidden="true" name="user_id" class="field-style field-split align-left" id="userid1"
           value=""></input>
       </li>
       <li>
-        <input type="text" name="bizPhone" class="field-style field-split align-left" placeholder="bizPhone" />
+        <input type="text" name="bizAddress" class="field-style field-full align-none" placeholder="bizAddress" />
       </li>
       <li>
-        <input type="text" name="bizAddress" class="field-style field-full align-none" placeholder="bizAddress" />
+        <input type="text" name="bizPhone" class="field-style field-split align-left" placeholder="bizPhone" />
       </li>
       <li>
         <textarea name="bizDescription" class="field-style" placeholder="bizDescription"></textarea>
@@ -138,14 +163,65 @@ body{
   <div id="added">
   </div>
   </div>
-  <button onclick="getcards()">getcard</button>
-  <div id="getcardsbyuser"></div>
-  
+  <div class="div">
+    <button onclick="getcards()">getcard</button>
+    <div id="getcardsbyuser"></div>
+    <br><br>
+    <center>
+      <button id="updatecard" onclick="updatecard()">click to hide update card</button></center>
+
+    <div id="updatecar">
+      <input type="text" name="cardid" placeholder="select card id to be updated" id="cardidupdate" value="">
+      <form class="form-style-9" id="cardform">
+        <ul>
+          <li>
+            <input type="text" name="bizName" class="field-style field-split align-left" placeholder="bizName"
+              minlength="3" required />
+            <input type="text" name="UserIDnumber" class="field-style field-split align-left" placeholder="UserIDnumber"
+              minlength="9" required />
+            <input type="text" name="bizImage" class="field-style field-split align-left" placeholder="bizImageLINK"
+              minlength="15" required />
+            <input type="text" hidden="true" name="user_id" class="field-style field-split align-left" id="userid2"
+              value=""></input>
+          </li>
+          <li>
+            <input type="text" name="bizAddress" class="field-style field-full align-none" placeholder="bizAddress"
+              minlength="3" required />
+          </li>
+          <li>
+            <input type="text" name="bizPhone" class="field-style field-split align-left" placeholder="bizPhone"
+              minlength="3" required />
+          </li>
+          <li>
+            <textarea name="bizDescription" class="field-style" placeholder="bizDescription" minlength="8"
+              required></textarea>
+          </li>
+          <li>
+            <input id="submitButton" type="submit" value="Update card"></input>
+          </li>
+        </ul>
+      </form>
+      <div id="newcardaupdatedata"></div>
+    </div>
+  </div>
+  <div id="delet">
+    <button onclick="deletecard()">delete card</button>
+    <input type="text" id="cardidfordelete" placeholder="cardid" value="">
+    <div id="deletecard">
+    </div>
+    <div id="likes">
+      <p>ENTER CARDS bizNumber  TO ADD YOUR ACCOUNT ON LIKES CARD SECTION</p>
+      <input id="cardnumber" type="text" value="" placeholder="add card number to add yourid in card likes section">
+      <button onclick="updatelikes()">card liked by user</button>
+      <p>
+      <div id="likesdata"></div>
+    </p>
+    </div>
+  </div>
 </body>
 <script>
-
   let idofuser;
-  let authtoken, Username, x, bussinseaccount;
+  let authtoken, Username, bussinseaccount;
 
   fetch('http://localhost:3000/auth/userpage')
     .then((response) => {
@@ -153,20 +229,27 @@ body{
       idofuser = (response.headers.get('_id'));
       bussinseaccount = (response.headers.get('bussnisaccount'));
       document.getElementById("userid1").value = idofuser;
+      document.getElementById("userid2").value = idofuser;
       console.log(bussinseaccount)
       displyform();
 
       function displyform() {
         if (bussinseaccount === 'false') {
           console.log("these", bussinseaccount)
-          document.getElementById("cardform").style.display = "none";
+          document.getElementById("cardfor").style.display = "none";
+          document.getElementById("updatecard").style.display = "none";
+          document.getElementById("delet").style.display = "none";
         } else {
-          document.getElementById("cardform").style.display = "block";
+          document.getElementById("cardfor").style.display = "block";
+          document.getElementById("updatecard").style.display = "block";
+          document.getElementById("delet").style.display = "block";
+
         }
       }
+
     });
 
-  function aref() {
+    function getuserdata() {
     fetch('/auth/user', {
         method: 'GET',
         headers: {
@@ -174,16 +257,20 @@ body{
         },
       }).then(res => res.json())
       .then(data => {
-        document.getElementById("demo1").innerHTML = ('name:' + JSON.stringify(data.name) + 'email:' + JSON.stringify(
-          data.email));
+      console.log(data)
+        document.getElementById("demo1").innerHTML = ('name: ' + JSON.stringify(data.name) + " " + 'email: ' + JSON
+          .stringify(
+            data.email) + " " + 'bussnisaccount: ' + JSON.stringify(data.bussnisaccount)+" "+ "created_at:"+JSON.stringify(data.created_at));
+
         userdata = data;
-        document.getElementById("username").innerHTML = ("Hello " + Object.values(userdata)[1]);
+        document.getElementById("username").innerHTML = ("Hello " + data.name);
       })
       .catch(err => {
         console.log(err)
       })
   }
-  let form = document.getElementById("cardform");
+
+  let form = document.getElementById("cardfor");
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     let prepayload = new FormData(form);
@@ -192,7 +279,7 @@ body{
     fetch('http://localhost:3000/cards', {
       method: "POST",
       headers: {
-        'x-auth-token': authtoken
+        'x-auth-token': authtoken,
       },
       body: payload,
     }).then(res => (res.json())).then(data =>
@@ -200,10 +287,12 @@ body{
         "<p>All new card data  " + JSON.stringify(data) + "</p>")
     ).catch(err => $('#added').html(
       "<p>BAD Authentication invalid token " + err + "</p>"))
-
   });
 
   function getcards() {
+    if (document.getElementById("getcardsbyuser").style.display === "block") {
+      document.getElementById("getcardsbyuser").style.display = "none"
+    } else(document.getElementById("getcardsbyuser").style.display = "block");
     console.log(authtoken)
     fetch('http://localhost:3000/cards/getcard', {
         method: 'GET',
@@ -222,7 +311,75 @@ body{
       .catch(err => {
         console.log(err)
       })
+  }
 
+  let update1 = document.getElementById('updatecar');
+
+  function updatecard() {
+    if (update1.style.display === "none") {
+      update1.style.display = "block"
+    } else(update1.style.display = "none");
+
+  }
+
+  function getcardid() {
+    let cardid = document.getElementById("cardidupdate").value;
+    return cardid
+  }
+
+
+  let form2 = document.getElementById("cardform");
+  form2.addEventListener('submit', function (e) {
+    e.preventDefault();
+    let prepayload2 = new FormData(form2);
+    let payload2 = new URLSearchParams(prepayload2);
+    console.log([...payload2])
+    fetch('http://localhost:3000/cards/updatecard', {
+      method: "PUT",
+      headers: {
+        'x-auth-token': authtoken,
+        'cardid': getcardid()
+      },
+      body: payload2,
+    }).then(res => (res.json())).then(data =>
+      $('#newcardaupdatedata').html(
+        "<p>All new card data  " + JSON.stringify(data) + "</p>")
+    ).catch(err => $('#added').html(
+      "<p>BAD Authentication invalid token " + err + "</p>"))
+  });
+
+
+  function deletecard() {
+    let CARDID = document.getElementById("cardidfordelete").value
+    console.log(CARDID)
+    fetch('http://localhost:3000/cards/DELETE', {
+        method: "DELETE",
+        headers: {
+          'x-auth-token': authtoken,
+          'CARDID': CARDID,
+          'USERID': idofuser
+        },
+      }).then(res => res.json())
+      .then(data => {
+        $('#deletecard').html(
+          "<p>deleted card" + JSON.stringify(data) + "</p>", console.log((data)))
+      })
+  }
+
+  function updatelikes(){
+let cardbizid=document.getElementById("cardnumber").value
+fetch('http://localhost:3000/cards/patch', {
+        method: "PATCH",
+        headers: {
+          'x-auth-token': authtoken,
+          'CARDID': cardbizid,
+          'USERID': idofuser
+        },
+      }).then(res => res.json())
+      .then(data => {
+        $('#likesdata').html(
+          "<p>added card likes" + JSON.stringify(data) + "</p>", console.log((data)))
+      })
   }
 </script>
 

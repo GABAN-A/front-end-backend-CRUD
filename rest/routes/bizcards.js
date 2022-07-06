@@ -6,7 +6,15 @@ const { User} = require('../models/users');
 const router = express.Router();
 
 
+//שמירת כרטיס חדש ובדיקת נתונים של הכרטיס
 router.post('/', auth, async (req, res) => {
+  let byid =req.body.user_id
+  //לבדוק אם משתמש הוא עסקי או לא
+  let user = await User.findById(byid);
+  if (user.bussnisaccount === false) {
+    res.send(user.bussnisaccount)
+    return
+  }
   const {  error} = validateCard(req.body);
   console.log(req.body)
   if (error) return (res.status(400).json((error.details[0].message)));
@@ -14,7 +22,6 @@ router.post('/', auth, async (req, res) => {
     try {
       let card = new Card({
         bizName: req.body.bizName,
-        UserIDnumber: req.body.UserIDnumber,
         user_id: req.body.user_id,
         bizPhone: req.body.bizPhone,
         bizAddress: req.body.bizAddress,
@@ -26,10 +33,11 @@ router.post('/', auth, async (req, res) => {
       res.send(post)
     } catch (error) {
       console.log(error)
-      res.status(500).json("id number should be unique|| " + error);
+      res.status(500).json("entrnal server error|| " + error);
     }
   }
 });
+//הצגת כול הכרטיסים שיש במאגר המידע
 router.route("/find").get(function (req, res) {
   Card.find({}, function (err, result) {
     if (err) {
@@ -37,12 +45,14 @@ router.route("/find").get(function (req, res) {
     } else {
       const arrOfObj3 = Object.entries(result).map(entry => entry[1])
       res.send(arrOfObj3)
-      //res.send(arrOfObj3[0].bizName,"<br></br>",arrOfObj3[0].bizName);//
     }
 
   });
 });
-router.post('/hello', (req, res) => {
+
+//חיפוש כרטיס לפי מספר ייחודי של הכרטיס
+
+router.post('/finedcarddata', (req, res) => {
   let card;console.log(req.body)
   var id = req.body._id;
   Card.findById(id, function (err, docs) {
@@ -58,8 +68,11 @@ router.post('/hello', (req, res) => {
   });
 });
 
+//הצגת כול ברטיסי הביקור השייכים לאותו משתמש
+
 router.get('/getcard', auth, async (req, res) => {
   let byid = req.user._id
+  //לבדוק אם משתמש הוא עסקי או לא
   let user = await User.findById(byid);
   if (user.bussnisaccount === false) {
     res.send(user.bussnisaccount)
@@ -79,16 +92,24 @@ router.get('/getcard', auth, async (req, res) => {
   }
 });
 
+//עידכון כרטיסים השיכים למשתמש 
+
 router.put('/updatecard', auth, async (req, res) => {
   let id = req.header('cardid');
   if (id.length!=24){
     return res.json("card id must be 24 digits")
   }
+  //לבדוק אם משתמש הוא עסקי או לא
+  let byid =req.body.user_id
+  let user = await User.findById(byid);
+  if (user.bussnisaccount === false) {
+    res.json("bussniseaccount is "+user.bussnisaccount)
+    return
+  }
   try {
     const { error} = validateCard(req.body);
     console.log(req.body)
-  if (error) return (res.status(400).json((error.details[0].message)));
-  console.log("theese is", error)
+  if (error) return (res.status(400).json((error.details[0].message)),console.log("theese is", error));
   let cheakcard = await Card.findOne({
     _id: id
   });
@@ -107,14 +128,20 @@ router.put('/updatecard', auth, async (req, res) => {
   res.status(500).json("internal server error " + error);
 }
 });
-
+//מחיקת כרטיסים השיכיים למשתמש
 router.delete('/DELETE', auth, async (req, res) => {
   let id = req.header('CARDID'),
     userid = req.header('USERID');
-  let cardcheak = {cardid: id,user_id: userid}
-  console.log(cardcheak)
-  let {  error} = (validatecardid(cardcheak));
-  if (error) {return (res.status(404).json(error.details[0].message))}
+    let cardcheak = {cardid: id,user_id: userid}
+    console.log(cardcheak)
+    let {  error} = (validatecardid(cardcheak));
+    if (error) {return (res.status(404).json(error.details[0].message))}
+    //לבדוק אם משתמש הוא עסקי או לא
+    let user = await User.findById(userid);
+    if (user.bussnisaccount === false) {
+      res.send(user.bussnisaccount)
+      return
+    }
    else {
     const card = await Card.findOneAndRemove({
       _id: id,
@@ -125,15 +152,16 @@ router.delete('/DELETE', auth, async (req, res) => {
   }
 });
 
-
-router.patch('/patch', auth, async (req, res) => {
+//עידכון או הוספה את המשתמש לרשומת הליקים של כרטיס הביקור
+router.patch('/patch', async (req, res) => {
   try {
     let id = req.header('CARDID');
     let userlikes = req.header('USERID');
     console.log(req.headers)
-    if(id==""){
+    if(id==""||id.length<2){
       return (res.status(400).json("empty and less than 3 digits"))
     }
+    //הוספת אחד המשתמשים לליקס תתקים בהקלדת מספר הכרטיס היחודי
     let cheakcard = await Card.findOne({bizNumber: id});
     if (!cheakcard) return (res.status(400).json("card not found "))
     console.log(cheakcard)
@@ -148,5 +176,24 @@ router.patch('/patch', auth, async (req, res) => {
     console.log(error)
     res.status(500).json(`server connection problem ${error} `);
   }
+});
+
+//אדמין יכול למחוק כרטיסים בלי צורך בתעודת זהות של משתמש
+//הרואט של האדמן אפשר להפעיל בעזרת פוסטמאן
+
+router.delete('/admin',auth, async (req, res) => {
+ let admin=req.header('admin')
+ let id=req.header('cardid')
+ console.log(admin)
+ if (admin=='true'){
+   const card = await Card.findOneAndRemove({
+  _id: id,
+})
+if (!card) return res.status(404).json('The card with the given ID was not found.');
+res.json(200, ("card was deleted"+card));
+}
+else{ return res.send("only admin access")
+}
+
 });
 module.exports = router;

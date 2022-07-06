@@ -10,14 +10,20 @@ const _ = require("lodash");
 
 
 let authotoken;let user={};let golabluser="";
+
+
 router.use(express.static(path.join(__dirname, 'public')))
 router.use(bodyParser.urlencoded({
   extended: true
 }));
 
+//דף הכניסה של המשתמשים הרשומים
+
 router.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '../public', 'login.html'));
 })
+
+//יצירת תוקן יחודי ובדוקת תקינות הנתונים של המשתמש הרשום 
 
 router.post('/', async (req, res,next) => {
   const { error } = validate(req.body);
@@ -34,10 +40,13 @@ golabluser=user;
   res.redirect('/auth/userpage');
 
 });
+
+//כניסה לדף הראשי של המשתמש 
+
 router.get('/userpage',async function (req, res,) {
   console.log(golabluser)
   if(golabluser===""){
-    res.redirect('/auth')
+    res.send('return to log in page')
   }
 else{
   res.header("authotoken",authotoken);
@@ -45,6 +54,7 @@ else{
 console.log(",USer loged in,these is token",(authotoken))
 }
 })
+//וולדציה של מאייל וסיסמה של המשתמש
 function validate(req) {
   const schema = Joi.object({
     email: Joi.string().min(6).max(255).required().email(),
@@ -52,10 +62,11 @@ function validate(req) {
   });
   return schema.validate(req);
 }
+//שליחת נתונים של המשתמש והצגתם 
 router.get('/user', auth, async (req, res) => {
   const user = await User.findById(req.user._id).select('-password');
   console.log(user);
-  res.send(JSON.stringify(user));
+  res.send(JSON.stringify(user)).status(200);
 });
  
 module.exports = router;

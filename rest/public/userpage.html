@@ -5,12 +5,10 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <title>Userpage</title>
 </head>
 <style>
-  
   button{
     border: 3px goldenrod solid;
     border-radius: 4px;
@@ -120,6 +118,7 @@ box-shadow: 2px 0px 22px 1px #767644;
     text-align: center;
   }
   #cardnumber{
+
     width:50%!important;
   }
 </style>
@@ -141,7 +140,6 @@ box-shadow: 2px 0px 22px 1px #767644;
     <ul>
       <li>
         <input type="text" name="bizName" class="field-style field-split align-left" placeholder="bizName" />
-        <input type="text" name="UserIDnumber" class="field-style field-split align-left" placeholder="UserIDnumber" />
         <input type="text" name="bizImage" class="field-style field-split align-left" placeholder="bizImageLINK" />
         <input type="text" hidden="true" name="user_id" class="field-style field-split align-left" id="userid1"
           value=""></input>
@@ -177,8 +175,6 @@ box-shadow: 2px 0px 22px 1px #767644;
           <li>
             <input type="text" name="bizName" class="field-style field-split align-left" placeholder="bizName"
               minlength="3" required />
-            <input type="text" name="UserIDnumber" class="field-style field-split align-left" placeholder="UserIDnumber"
-              minlength="9" required />
             <input type="text" name="bizImage" class="field-style field-split align-left" placeholder="bizImageLINK"
               minlength="15" required />
             <input type="text" hidden="true" name="user_id" class="field-style field-split align-left" id="userid2"
@@ -210,8 +206,8 @@ box-shadow: 2px 0px 22px 1px #767644;
     <div id="deletecard">
     </div>
     <div id="likes">
-      <p>ENTER CARDS bizNumber  TO ADD YOUR ACCOUNT ON LIKES CARD SECTION</p>
-      <input id="cardnumber" type="text" value="" placeholder="add card number to add yourid in card likes section">
+      <p style="color:red!important;">ENTER CARDS bizNumber  TO ADD YOUR ACCOUNT ON LIKES CARD SECTION</p>
+      <input id="cardnumber" type="text" value="" placeholder="add card uniqu biznumber to add yourid in card likes section">
       <button onclick="updatelikes()">card liked by user</button>
       <p>
       <div id="likesdata"></div>
@@ -260,7 +256,7 @@ box-shadow: 2px 0px 22px 1px #767644;
       console.log(data)
         document.getElementById("demo1").innerHTML = ('name: ' + JSON.stringify(data.name) + " " + 'email: ' + JSON
           .stringify(
-            data.email) + " " + 'bussnisaccount: ' + JSON.stringify(data.bussnisaccount)+" "+ "created_at:"+JSON.stringify(data.created_at));
+            data.email) + " " + 'bussnisaccount: ' + JSON.stringify(data.bussnisaccount)+" "+ "user id number:"+JSON.stringify(data._id) +"created_at:"+JSON.stringify(data.created_at));
 
         userdata = data;
         document.getElementById("username").innerHTML = ("Hello " + data.name);
